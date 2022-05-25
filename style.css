@@ -160,6 +160,7 @@ a:hover {
     text-align: center;
     width: 100%;
     border: 2px solid black;
+    border-radius: 10px;
 }
 
 .footer {
