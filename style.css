@@ -146,10 +146,14 @@ a:hover {
     margin-right: 30px;
 }
 
-.ajuste {
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-bottom: 10px;
+.moeda {
+    padding-bottom: 5px;
+    padding-left: 2px;
+}
+
+.acao {
+    padding-bottom: 5px;
+    padding-left: 2px;
 }
 
 .tabela {
