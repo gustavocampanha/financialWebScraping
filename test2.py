@@ -41,14 +41,22 @@ for a in range(0,len(acao),2):
     dicionario_acao['Nome da Ação'] = acao2[a]
     dicionario_acao['Quantidade de Ações'] = acao2[a+1]
 
-    acao_info = yf.Ticker(lista_acao).info
+    acao_info = yf.Ticker(acao2[a]).info
     acao_valor = acao_info['currentPrice']
     dicionario_acao['Valor da Ação'] = acao_valor
+
+    quant = float(acao2[a+1])
+    valor = float(acao_valor)
+    tot = quant * valor
+
+    dicionario_acao['Valor Investido'] = tot
 
     lista_acao.append(dicionario_acao.copy())
 
     del dicionario_acao['Nome da Ação']
     del dicionario_acao['Quantidade de Ações']
     del dicionario_acao['Valor da Ação']
+    del dicionario_acao['Valor Investido']
+
 
 print(lista_acao)
