@@ -147,8 +147,9 @@ a:hover {
 }
 
 .moeda {
-    padding-bottom: 5px;
+    padding-bottom: 30px;
     padding-left: 2px;
+
 }
 
 .acao {
@@ -159,8 +160,20 @@ a:hover {
 .tabela {
     text-align: center;
     width: 100%;
-    border: 2px solid black;
+    /* border: 2px solid black; */
+    border-collapse: collapse;
     border-radius: 10px;
+    max-width: 1000px;
+    margin: auto;
+}
+
+th, td {
+    padding: 10px;
+}
+
+th {
+    background-color: var(--cordestaque);
+    color: white;
 }
 
 .footer {
