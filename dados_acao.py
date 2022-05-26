@@ -6,50 +6,44 @@ import yfinance as yf
 #Criando a função que obtém os dados das ações na web
 def acao(url):
 
-	#Criando um dicionario e uma lista para armazenarmos os dados das ações
-	dicionario_acao = dict()
-	lista_acao = list()
-
 	#Utilizando as bibliotecas para acessar o conteúdo do site na web
 	page = requests.get(url)
-	soup = BeautifulSoup(page.text, 'html.parser')
+	soup = BeautifulSoup(page.text, 'lxml')
 
 	#Buscando a classe "acao" no código HTML
-	content = soup.find('div', attrs={"class": "acao"})
+	content = soup.find('div', class_='acao')
 
 	#Buscando a tag "td" na classe "acao"
-	acao = content.find_all('td')
+	conteudo_acao = content.find_all('td')
 
-	#Criando uma lista para colocarmos os dados obtidos na forma de string
-	acao2 = list()
+	tam = len(conteudo_acao)
 
-	#Transformando os tipos primitivos dos dados obtidos em string
-	for b in range(0,len(acao)):
-		acao2.append(acao[b])
-		acao2[b] = str(acao2[b])
-
-	#Removendo as tags de abertura
-	for c in range(0, len(acao)):
-		acao2[c] = acao2[c][4:]
-
-	#Removendo as tags de fechamento
-	for d in range(0, len(acao)):
-		acao2[d] = acao2[d][:-5]
+	#Criando um dicionario e uma lista para armazenarmos os dados das ações
+	dicionario_acao = dict()
+	lista_dados_acao = list()
 
 	#Ajustando o armazenamento do conteúdo
-	for a in range(0,len(acao),2):
+	for a in range(0,tam,2):
 		
-		dicionario_acao['Nome da Ação'] = acao2[a]
-		dicionario_acao['Quantidade de Ações'] = acao2[a+1]
+		dicionario_acao['Nome da Ação'] = conteudo_acao[a].text
+		dicionario_acao['Quantidade de Ações'] = int(conteudo_acao[a+1].text)
 
-		acao_info = yf.Ticker(lista_acao).info
+		acao_nome = conteudo_acao[a].text
+		acao_info = yf.Ticker(acao_nome).info
 		acao_valor = acao_info['currentPrice']
 		dicionario_acao['Valor da Ação'] = acao_valor
 
-		lista_acao.append(dicionario_acao.copy())
+		quant = float(conteudo_acao[a+1].text)
+		valor = float(acao_valor)
+		tot = quant * valor
+
+		dicionario_acao['Valor Investido'] = tot
+
+		lista_dados_acao.append(dicionario_acao.copy())
 
 		del dicionario_acao['Nome da Ação']
 		del dicionario_acao['Quantidade de Ações']
 		del dicionario_acao['Valor da Ação']
+		del dicionario_acao['Valor Investido']
 
-	print(lista_acao)
+	print(lista_dados_acao)

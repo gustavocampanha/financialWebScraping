@@ -12,5 +12,5 @@ print('-='*60)
 #Solicitando a URL ao usuário
 url = input('Informe a URL: ')
 
-""" dados_moeda.moeda(url) """
 dados_acao.acao(url)
+dados_moeda.moeda(url)
