@@ -1,6 +1,7 @@
 #Importando as bibliotecas necessárias para criarmos a função
 import requests
 from bs4 import BeautifulSoup
+import yfinance as yf
 
 #Criando a função que obtém os dados das ações na web
 def acao(url):
@@ -37,10 +38,18 @@ def acao(url):
 
 	#Ajustando o armazenamento do conteúdo
 	for a in range(0,len(acao),2):
+		
 		dicionario_acao['Nome da Ação'] = acao2[a]
 		dicionario_acao['Quantidade de Ações'] = acao2[a+1]
+
+		acao_info = yf.Ticker(lista_acao).info
+		acao_valor = acao_info['currentPrice']
+		dicionario_acao['Valor da Ação'] = acao_valor
+
 		lista_acao.append(dicionario_acao.copy())
+
 		del dicionario_acao['Nome da Ação']
 		del dicionario_acao['Quantidade de Ações']
+		del dicionario_acao['Valor da Ação']
 
 	print(lista_acao)

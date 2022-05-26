@@ -43,4 +43,4 @@ def moeda(url):
 		del dicionario_moeda['Nome da Moeda']
 		del dicionario_moeda['Quantidade de Moedas']
 
-	print(lista_moeda)
+	
