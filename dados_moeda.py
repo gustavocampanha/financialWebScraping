@@ -42,3 +42,5 @@ def moeda(url):
 		lista_moeda.append(dicionario_moeda.copy())
 		del dicionario_moeda['Nome da Moeda']
 		del dicionario_moeda['Quantidade de Moedas']
+
+	print(lista_moeda)

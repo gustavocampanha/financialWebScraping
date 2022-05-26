@@ -42,3 +42,5 @@ def acao(url):
 		lista_acao.append(dicionario_acao.copy())
 		del dicionario_acao['Nome da Ação']
 		del dicionario_acao['Quantidade de Ações']
+
+	print(lista_acao)
