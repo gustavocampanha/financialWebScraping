@@ -46,4 +46,4 @@ def acao(url):
 		del dicionario_acao['Valor da Ação']
 		del dicionario_acao['Valor Investido']
 
-	print(lista_dados_acao)
+	return lista_dados_acao

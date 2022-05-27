@@ -24,7 +24,7 @@ def moeda(url):
 
 	#Ajustando o armazenamento do conteúdo
 	for a in range(0,tam,2):
-		
+
 		dicionario_moeda['Nome da Moeda'] = conteudo_moeda[a].text
 		dicionario_moeda['Quantidade de Moeda'] = int(conteudo_moeda[a+1].text)
 
