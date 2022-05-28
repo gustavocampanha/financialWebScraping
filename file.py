@@ -1,16 +1,18 @@
 #Importando os modulos criados que contem as funcoes do programa
-import dados_moeda
-import dados_acao
+from dados_moeda import moeda
+from dados_acao import acao
 
 #Interface grafica do software
 print('-='*60)
 print('\033[32m{:^120}\033[m'.format('Bem Vindo ao Gusta TechPy'))
 print('-='*60)
-print('Somos um software capazes de analisarmos dados de carteira de investidores e colocarmos esses dados em uma planilha Excel')
+print('Somos um software capazes de \033[1manalisarmos dados\033[m de carteira de investidores e colocarmos esses dados em uma planilha Excel')
 print('-='*60)
 
 #Solicitando a URL ao usuário
-url = input('Informe a URL: ')
+url = input('\033[7mInforme a URL:\033[m ')
 
-dados_acao.acao(url)
-dados_moeda.moeda(url)
+ls_acao = acao(url)
+ls_moeda = moeda(url)
+print(ls_acao)
+print(ls_moeda)

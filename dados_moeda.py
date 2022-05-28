@@ -46,4 +46,4 @@ def moeda(url):
 		del dicionario_moeda['Valor da Moeda']
 		del dicionario_moeda['Valor Investido']
 
-	print(lista_dados_moeda)
+	return lista_dados_moeda
