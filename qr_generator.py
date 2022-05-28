@@ -20,7 +20,9 @@ def qr_generator(url):
             version=1,
             box_size=10,
             border=5)
+    
 
+    """ x = valor_da_carteira.find('.') """
     valor_final = (f'R$ {valor_da_carteira}')
 
     qr.add_data(valor_final)
