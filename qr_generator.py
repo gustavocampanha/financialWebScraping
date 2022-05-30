@@ -15,15 +15,16 @@ def qr_generator(url):
         valor_da_carteira += ls_moeda[v_moeda]['Valor Investido']
 
 
-    #Creating an instance of qrcode
+    #Criando o QRCode
     qr = qrcode.QRCode(
             version=1,
             box_size=10,
             border=5)
     
-
-    """ x = valor_da_carteira.find('.') """
+    
+    valor_da_carteira = round(valor_da_carteira,2)
     valor_final = (f'R$ {valor_da_carteira}')
+    print(valor_final)
 
     qr.add_data(valor_final)
     qr.make(fit=True)
