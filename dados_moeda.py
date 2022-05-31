@@ -26,7 +26,7 @@ def moeda(url):
 	for a in range(0,tam,2):
 
 		dicionario_moeda['Nome da Moeda'] = conteudo_moeda[a].text
-		dicionario_moeda['Quantidade de Moeda'] = int(conteudo_moeda[a+1].text)
+		dicionario_moeda['Quantidade de Moeda'] = float(conteudo_moeda[a+1].text)
 
 		moeda_nome = conteudo_moeda[a].text
 		moeda_info = yf.Ticker(moeda_nome).info
@@ -36,6 +36,7 @@ def moeda(url):
 		quant = float(conteudo_moeda[a+1].text)
 		valor = float(moeda_valor)
 		tot = quant * valor
+		tot = round(tot, 2)
 
 		dicionario_moeda['Valor Investido'] = tot
 

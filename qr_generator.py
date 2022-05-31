@@ -21,10 +21,11 @@ def qr_generator(url):
             box_size=10,
             border=5)
     
-    
+    #Ajustando as casas decimais do número
     valor_da_carteira = round(valor_da_carteira,2)
+
+    #Adicionando o "R$"
     valor_final = (f'R$ {valor_da_carteira}')
-    print(valor_final)
 
     qr.add_data(valor_final)
     qr.make(fit=True)

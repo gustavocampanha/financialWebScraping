@@ -26,7 +26,7 @@ def acao(url):
 	for a in range(0,tam,2):
 		
 		dicionario_acao['Nome da Ação'] = conteudo_acao[a].text
-		dicionario_acao['Quantidade de Ações'] = int(conteudo_acao[a+1].text)
+		dicionario_acao['Quantidade de Ações'] = float(conteudo_acao[a+1].text)
 
 		acao_nome = conteudo_acao[a].text
 		acao_info = yf.Ticker(acao_nome).info
@@ -36,6 +36,7 @@ def acao(url):
 		quant = float(conteudo_acao[a+1].text)
 		valor = float(acao_valor)
 		tot = quant * valor
+		tot = round(tot, 2)
 
 		dicionario_acao['Valor Investido'] = tot
 
