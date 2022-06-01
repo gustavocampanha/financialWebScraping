@@ -30,7 +30,7 @@ def acao(url):
 
 		acao_nome = conteudo_acao[a].text
 		acao_info = yf.Ticker(acao_nome).info
-		acao_valor = acao_info['currentPrice']
+		acao_valor = acao_info['regularMarketPrice']
 		dicionario_acao['Valor da Ação'] = acao_valor
 
 		quant = float(conteudo_acao[a+1].text)

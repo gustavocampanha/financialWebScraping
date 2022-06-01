@@ -27,5 +27,5 @@ def graf1(url):
     
     df = pd.DataFrame(data,columns=['Ativos','Valor Investido'])
     df.plot(x ='Ativos', y='Valor Investido', kind = 'bar')
-    plt.show()
     plt.savefig('grafico_1.png')
+    plt.close()
