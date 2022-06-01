@@ -1,13 +1,5 @@
-
-#Ajustar ações estrangeiras para BRL
-
-
 #Importando os modulos criados que contem as funcoes do programa
-from dados_moeda import moeda
-from dados_acao import acao
-from qr_generator import qr_generator
-from excel_tabela import excel_tabela
-from grafico_1 import graf1
+from func import ativos, graf1, graf2, qr_generator, excel_tabela
 
 #Interface grafica do software
 print('-='*60)
@@ -17,12 +9,13 @@ print('Somos um software capazes de \033[1manalisarmos dados\033[m de carteira d
 print('-='*60)
 
 #Solicitando a URL ao usuário
-url = input('\033[7mInforme a URL:\033[m ')
+url_user = input('\033[7mInforme a URL:\033[m ')
 
-ls_acao = acao(url)
-ls_moeda = moeda(url)
+url = url_user.strip()
 
+dicionario_ativos = ativos(url)
 
-graf1(url)
-qr_generator(url)
-excel_tabela(url)
+graf1(dicionario_ativos)
+graf2(dicionario_ativos)
+qr_generator(dicionario_ativos)
+excel_tabela(dicionario_ativos)
