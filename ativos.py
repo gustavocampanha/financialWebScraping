@@ -101,7 +101,7 @@ for unidade_moeda_acao, moeda in moedas_estrangeiras.items():
 
 
 #Testar o codigo antes de tirar esse do comentario
-""" for ticker_ativo, dict_ativo in dicionario_ativos.items():
+for ticker_ativo, dict_ativo in dicionario_ativos.items():
     unidade_moeda_acao = dict_ativo.get("Currency")
     
     if unidade_moeda_acao == "BRL":
@@ -110,7 +110,7 @@ for unidade_moeda_acao, moeda in moedas_estrangeiras.items():
     moeda = moedas_estrangeiras.get(unidade_moeda_acao)
     fator_conversao_BRL = moeda.get("fator_conversao_BRL")
     
-    dict_ativo["current_value"] = dict_ativo.get("current_value") * fator_conversao_BRL """
+    dict_ativo["current_value"] = dict_ativo.get("current_value") * fator_conversao_BRL
 
 print(dicionario_ativos)
 print(moedas_estrangeiras)
