@@ -1,4 +1,5 @@
 #Importando as bibliotecas necessárias para criarmos a função
+from calendar import c
 import requests
 from bs4 import BeautifulSoup
 import yfinance as yf
@@ -58,7 +59,7 @@ def ativos(url):
         dicionario_ativos[conteudo_moeda[a].text]['Tipo'] = 'Moeda'
 
         #Adicionando a currency da moeda
-        dicionario_ativos[conteudo_moeda[a].text]['Currency'] = conteudo_moeda[a].text
+        dicionario_ativos[conteudo_moeda[a].text]['Currency'] = conteudo_moeda[a].text[0:3]
 
 
     #Buscando a classe "acao" no código HTML
@@ -100,9 +101,6 @@ def ativos(url):
         #Pegando a currency da ação
         unidade_moeda_acao = acao_info['currency']
 
-        if unidade_moeda_acao == 'BRL':
-            unidade_moeda_acao = 'BRL=X'
-
         #Adicionando a currency da ação no dicionário
         dicionario_ativos[conteudo_acao[a].text]['Currency'] = unidade_moeda_acao
 
@@ -112,7 +110,7 @@ def ativos(url):
         #Pegando a currency do ativo
         currency = dicionario_ativos[dicionario].get("Currency")
 
-        if currency == 'BRL=X':
+        if currency == 'BRL':
             continue
 
         #Ajustando os cambios para fazer a consulta ao Yahoo Finance
@@ -132,7 +130,7 @@ def ativos(url):
 
         unidade_moeda = dict_ativo.get("Currency")
         
-        if unidade_moeda == "BRL=X":
+        if unidade_moeda == "BRL":
             continue
 
         if unidade_moeda == None:
@@ -164,6 +162,7 @@ def graf1(dicionario_ativos):
 
     df = pd.DataFrame(data,columns=['Ativos','Valor Investido'])
     df.plot(x ='Ativos', y='Valor Investido', kind = 'bar')
+    plt.tight_layout()
     plt.savefig('grafico_1.png')
     plt.close()
 
@@ -191,6 +190,32 @@ def graf2(dicionario_ativos):
 
 
     plt.savefig('grafico_2.png')
+    plt.close()
+
+
+def graf3(dicionario_ativos):
+
+    currencies = set([dicionario_ativos[ativo]['Currency'] for ativo in dicionario_ativos])
+    plot_info = {}
+
+    for currency in currencies:
+
+        filtered_currency = { 
+            k: v for k, v in dicionario_ativos.items() 
+            if v['Currency'] == currency 
+        }
+        
+        total = [ dicionario_ativos[elem]['Valor Investido'] for elem in filtered_currency ]
+        total = sum(total)
+
+        plot_info[currency] = total
+
+    print(plot_info)
+
+    plt.pie(plot_info.values(), labels=plot_info.keys(), autopct='%1.1f%%')
+    plt.title('Distribuição Cambial')
+
+    plt.savefig('grafico_3.png')
     plt.close()
 
 
@@ -358,10 +383,10 @@ def excel_tabela(dicionario_ativos):
     imgg2 = Image("grafico_2.png") 
     graf2.add_image(imgg2, "A1")
 
-    """ #Adicionando o gráfico 3
+    #Adicionando o gráfico 3
     graf3 = arquivo['Grafico 3']
     imgg3 = Image("grafico_3.png") 
-    graf3.add_image(imgg3, "A1") """
+    graf3.add_image(imgg3, "A1")
 
     #Adicionando o QRCode na planilha
     pag_qrcode = arquivo['Valor da Carteira']
@@ -374,7 +399,7 @@ def excel_tabela(dicionario_ativos):
     pag_inicial.sheet_view.showGridLines = False
     graf1.sheet_view.showGridLines = False
     graf2.sheet_view.showGridLines = False
-    """ graf3.sheet_view.showGridLines = False """
+    graf3.sheet_view.showGridLines = False
     pag_qrcode.sheet_view.showGridLines = False
 
     #Salvar a planilha

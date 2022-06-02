@@ -1,5 +1,5 @@
 #Importando os modulos criados que contem as funcoes do programa
-from gusta_tech import ativos, graf1, graf2, qr_generator, excel_tabela
+from gusta_tech import ativos, graf1, graf2, graf3, qr_generator, excel_tabela
 
 #Interface grafica do software
 print('-='*60)
@@ -16,5 +16,6 @@ url = url_user.strip()
 dicionario_ativos = ativos(url)
 graf1(dicionario_ativos)
 graf2(dicionario_ativos)
+graf3(dicionario_ativos)
 qr_generator(dicionario_ativos)
 excel_tabela(dicionario_ativos)
