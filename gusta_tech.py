@@ -1,5 +1,4 @@
 #Importando as bibliotecas necessárias para criarmos a função
-from random import randint
 import requests
 from bs4 import BeautifulSoup
 import yfinance as yf
@@ -28,8 +27,7 @@ def ativos(url):
     dicionario_ativos = dict()
     moedas_estrangeiras = dict()
 
-
-    #Ajustando o armazenamento do conteúdo
+    #Adicionando as moedas no dicionario "dicionario_ativos"
     for a in range(0,tam_moeda,2):
 
         #Criando um dicionário do ativo
@@ -59,6 +57,9 @@ def ativos(url):
         #Adicionando o tipo de ativo
         dicionario_ativos[conteudo_moeda[a].text]['Tipo'] = 'Moeda'
 
+        #Adicionando a currency da moeda
+        dicionario_ativos[conteudo_moeda[a].text]['Currency'] = conteudo_moeda[a].text
+
 
     #Buscando a classe "acao" no código HTML
     content = soup.find('div', class_='acao')
@@ -66,7 +67,7 @@ def ativos(url):
     conteudo_acao = content.find_all('td')
     tam_acao = len(conteudo_acao)
 
-
+    #Adicionando as ações no dicionario "dicionario_ativos"
     for a in range(0,tam_acao,2):
 
         #Criando um dicionário do ativo
@@ -96,43 +97,54 @@ def ativos(url):
         #Adicionando o tipo de ativo
         dicionario_ativos[conteudo_acao[a].text]['Tipo'] = 'Ação'
 
+        #Pegando a currency da ação
         unidade_moeda_acao = acao_info['currency']
 
+        if unidade_moeda_acao == 'BRL':
+            unidade_moeda_acao = 'BRL=X'
+
+        #Adicionando a currency da ação no dicionário
         dicionario_ativos[conteudo_acao[a].text]['Currency'] = unidade_moeda_acao
+
 
     for dicionario in dicionario_ativos:
 
+        #Pegando a currency do ativo
         currency = dicionario_ativos[dicionario].get("Currency")
 
-        if currency == 'BRL':
+        if currency == 'BRL=X':
             continue
 
-        if currency == None:
-            continue
-
+        #Ajustando os cambios para fazer a consulta ao Yahoo Finance
         moedas_estrangeiras[currency] = {"Ticker": currency.upper() + "BRL=X"}
         
+        #Fazendo a consulta ao Yahoo Finance
         ativo = yf.Ticker(moedas_estrangeiras[currency]['Ticker'])
         info_ativo = ativo.info
 
+        #Pegando o valor do cambio atual
         fator_multiplicativo = info_ativo['regularMarketPrice']
 
+        #Adicionando o fator do cambio no dicionario das moedas estrangeiras
         moedas_estrangeiras[currency]["Fator Multiplicativo"] = fator_multiplicativo
 
     for ticker_ativo, dict_ativo in dicionario_ativos.items():
 
         unidade_moeda = dict_ativo.get("Currency")
         
-        if unidade_moeda == "BRL":
+        if unidade_moeda == "BRL=X":
             continue
 
         if unidade_moeda == None:
             continue
         
+        if dict_ativo["Tipo"] == 'Moeda':
+            continue
+
         moeda = moedas_estrangeiras[unidade_moeda]
         fator_conversao_BRL = moeda.get("Fator Multiplicativo")
         
-        dict_ativo["Valor de Ação"] = round(dict_ativo.get("Valor de Ação") * fator_conversao_BRL, 2)
+        dict_ativo["Valor do Ativo"] = round(dict_ativo.get("Valor do Ativo") * fator_conversao_BRL, 2)
 
     return dicionario_ativos
 
@@ -358,6 +370,12 @@ def excel_tabela(dicionario_ativos):
     imgqr.width = 500
     pag_qrcode.add_image(imgqr, "A1")
 
+    #Retirando as linhas de grade
+    pag_inicial.sheet_view.showGridLines = False
+    graf1.sheet_view.showGridLines = False
+    graf2.sheet_view.showGridLines = False
+    """ graf3.sheet_view.showGridLines = False """
+    pag_qrcode.sheet_view.showGridLines = False
+
     #Salvar a planilha
-    x = randint(0,100)
-    arquivo.save(f'Investimento{x}.xlsx')
+    arquivo.save(f'planilhaInvestimento.xlsx')
