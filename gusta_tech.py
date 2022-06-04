@@ -13,11 +13,12 @@ from openpyxl.styles import Border, Side, Color, Font, PatternFill
 import validators
 from time import sleep
 
+#Criando a função para verificar se a URL inserida realmente existe
 def verifica_url(url):
     valid = validators.url(url)
     return valid
 
-#Criando a função que obtém os dados das moedas na web
+#Criando a função que obtém os dados dos ativos na página
 def ativos(url):
 
     #Utilizando as bibliotecas para acessar o conteúdo do site na web
@@ -26,11 +27,12 @@ def ativos(url):
 
     #Buscando a classe "moeda" no código HTML
     content = soup.find('div', class_='moeda')
+
     #Buscando a tag "td" na classe "moeda"
     conteudo_moeda = content.find_all('td')
     tam_moeda = len(conteudo_moeda)
 
-    #Criando um dicionario e uma lista para armazenarmos os dados das ações
+    #Criando um dicionario e uma lista para armazenarmos os dados dos ativos
     dicionario_ativos = dict()
     moedas_estrangeiras = dict()
 
@@ -70,6 +72,7 @@ def ativos(url):
 
     #Buscando a classe "acao" no código HTML
     content = soup.find('div', class_='acao')
+
     #Buscando a tag "td" na classe "moeda"
     conteudo_acao = content.find_all('td')
     tam_acao = len(conteudo_acao)
