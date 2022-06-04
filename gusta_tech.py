@@ -10,6 +10,12 @@ import openpyxl
 from openpyxl.drawing.image import Image
 from openpyxl.styles.alignment import Alignment
 from openpyxl.styles import Border, Side, Color, Font, PatternFill
+import validators
+from time import sleep
+
+def verifica_url(url):
+    valid = validators.url(url)
+    return valid
 
 #Criando a função que obtém os dados das moedas na web
 def ativos(url):
@@ -210,8 +216,6 @@ def graf3(dicionario_ativos):
 
         plot_info[currency] = total
 
-    print(plot_info)
-
     plt.pie(plot_info.values(), labels=plot_info.keys(), autopct='%1.1f%%')
     plt.title('Distribuição Cambial')
 
@@ -404,3 +408,48 @@ def excel_tabela(dicionario_ativos):
 
     #Salvar a planilha
     arquivo.save(f'planilhaInvestimento.xlsx')
+
+
+def interface():
+    print('-='*60)
+    sleep(0.2)
+    print('\033[32m{:^120}\033[m'.format('Bem Vindo ao Gusta TechPy'))
+    sleep(0.2)
+
+    while True:
+        sleep(0.2)
+        print('-='*60)
+        sleep(0.2)
+        print("""
+    [ 1 ] Adicionar URL
+    [ 2 ] Sair
+            """)
+        sleep(0.2)
+        print('-='*60)
+        sleep(0.2)
+        escolha = input('\nEscolha sua opção: ').strip() #A função vai verificar se a URL digitada existe
+        if escolha == '1':
+            sleep(0.2)
+            url = input('\n\033[7mInforme a URL:\033[m ') #Vamos armazenar a URL do usuário
+            while True:
+                if verifica_url(url):
+                    dicionario_ativos = ativos(url)
+                    graf1(dicionario_ativos)
+                    graf2(dicionario_ativos)
+                    graf3(dicionario_ativos)
+                    qr_generator(dicionario_ativos)
+                    excel_tabela(dicionario_ativos)
+                    break
+                else:
+                    sleep(0.2)
+                    url = input('\n\033[7mInforme a URL:\033[m ') #Vamos armazenar a URL do usuário
+                    verifica_url(url)
+            break
+        elif escolha == '2': #Opção de fechar o programa
+            break
+
+        else:
+            sleep(0.2)
+            print("\n\033[31mPor favor, escolha uma opção válida!\033[m")
+    sleep(0.2)
+    print("\n\033[32mObrigado, Volte Sempre!!\033[m\n")
