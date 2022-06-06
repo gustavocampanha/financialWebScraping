@@ -113,7 +113,7 @@ def ativos(url):
         #Adicionando a currency da ação no dicionário
         dicionario_ativos[conteudo_acao[a].text]['Currency'] = unidade_moeda_acao
 
-
+    #Ajustando a currency correta dos ativos
     for dicionario in dicionario_ativos:
 
         #Pegando a currency do ativo
@@ -135,6 +135,7 @@ def ativos(url):
         #Adicionando o fator do cambio no dicionario das moedas estrangeiras
         moedas_estrangeiras[currency]["Fator Multiplicativo"] = fator_multiplicativo
 
+    #Ajustando o valor do ativo para o cambio do real
     for ticker_ativo, dict_ativo in dicionario_ativos.items():
 
         unidade_moeda = dict_ativo.get("Currency")
@@ -153,40 +154,51 @@ def ativos(url):
         
         dict_ativo["Valor do Ativo"] = round(dict_ativo.get("Valor do Ativo") * fator_conversao_BRL, 2)
 
+    #Retornando o dicionario completo e sem necessidade de ajuste
     return dicionario_ativos
 
-
+#Criando o primeiro gráfico
 def graf1(dicionario_ativos):
 
+    #Criando uma lista para adicionarmos os ativos do dicionario
     ls_ativos = list()
+    #Criando uma lista para adicionarmos o valor de cada ativo do dicionario
     ls_valor_investido = list()
+
+    #Adicionando os dados nas listas
     for ativos in dicionario_ativos:
         ls_ativos.append(ativos)
         ls_valor_investido.append(dicionario_ativos[ativos]['Valor Investido'])
 
+    #Ajustando a sintaxe
     data = {
         'Ativos': ls_ativos,
         'Valor Investido': ls_valor_investido
     }
 
+    #Utilizando o Pandas para criar o gráfico
     df = pd.DataFrame(data,columns=['Ativos','Valor Investido'])
     df.plot(x ='Ativos', y='Valor Investido', kind = 'bar')
     plt.tight_layout()
+
+    #Salvando o gráfico criado
     plt.savefig('grafico_1.png')
     plt.close()
 
-
+#Criando o segundo grafico
 def graf2(dicionario_ativos):
 
     valor_total_moeda = 0
     valor_total_acao = 0
 
+    #Fazendo o somatório dos valores investidos em cada tipo de investimento
     for ativo in dicionario_ativos:
         if dicionario_ativos[ativo]['Tipo'] == 'Ação':
             valor_total_acao += dicionario_ativos[ativo]['Valor Investido']
         if dicionario_ativos[ativo]['Tipo'] == 'Moeda':
             valor_total_moeda += dicionario_ativos[ativo]['Valor Investido']
 
+    #Ajustando as casas decimais dos valores obtidos
     valor_total_acao = round(valor_total_acao, 2)
     valor_total_moeda = round(valor_total_moeda, 2)
 
@@ -194,16 +206,18 @@ def graf2(dicionario_ativos):
         'Moeda': valor_total_moeda,
         'Ação': valor_total_acao
     }
+
     plt.pie(data.values(), labels=data.keys(), autopct='%1.1f%%')
     plt.title('Disposição de Ativos')
 
-
+    #Salvando o gráfico
     plt.savefig('grafico_2.png')
     plt.close()
 
-
+#Criando o terceiro gráfico
 def graf3(dicionario_ativos):
 
+    #Colocando as currencies sem repeteção para sabermos quais cambios temos na cartieira
     currencies = set([dicionario_ativos[ativo]['Currency'] for ativo in dicionario_ativos])
     plot_info = {}
 
@@ -214,18 +228,20 @@ def graf3(dicionario_ativos):
             if v['Currency'] == currency 
         }
         
+        #Ajustando os valores para fazermos o somatório
         total = [ dicionario_ativos[elem]['Valor Investido'] for elem in filtered_currency ]
         total = sum(total)
-
         plot_info[currency] = total
 
+    #Passando as informações para a criação do gráfico
     plt.pie(plot_info.values(), labels=plot_info.keys(), autopct='%1.1f%%')
     plt.title('Distribuição Cambial')
 
+    #Salvando o terceiro gráfico
     plt.savefig('grafico_3.png')
     plt.close()
 
-
+#Criando o QRCode
 def qr_generator(dicionario_ativos):
 
     #Descobrindo o patrimonio total da pessoa
@@ -248,9 +264,11 @@ def qr_generator(dicionario_ativos):
     qr.add_data(valor_final)
     qr.make(fit=True)
     img = qr.make_image(fill='black', back_color='white')
+
+    #Salvando o QRCode
     img.save('QRCode_Secreto.png')
 
-
+#Parte da tabela do Excel
 def excel_tabela(dicionario_ativos):
 
     #Criar uma planilha chamada book
@@ -281,7 +299,7 @@ def excel_tabela(dicionario_ativos):
     for col in range(0, 5):
         pag_inicial.cell(row=2,column=col+2).value = header[col]
 
-    
+    #Descobrir a quantidade de ativos na carteira
     ativos_total = len(dicionario_ativos)
 
     #Adicionando os nomes na coluna 2
@@ -354,16 +372,13 @@ def excel_tabela(dicionario_ativos):
     #Adicionando borda na tabela
     border_header = Side(border_style='medium', color="000000")
     border_sheet = Side(border_style='thin', color="000000")
-
     border_header = Border(top=border_header, bottom=border_header, right=border_header, left=border_header)
-
     border_sheet = Border(top=border_sheet, bottom=border_sheet, right=border_sheet, left=border_sheet)
 
-
+    #Adicionando borda nas células com os dados do patrimônio
     for lin in range(0, ativos_total):
         for col in range(0, 5):
             pag_inicial.cell(row=lin+3, column=col +2).border = border_sheet
-
     for col in range(0,5):
         pag_inicial.cell(row=2, column=col +2).border = border_header
 
@@ -412,13 +427,14 @@ def excel_tabela(dicionario_ativos):
     #Salvar a planilha
     arquivo.save(f'planilhaInvestimento.xlsx')
 
-
+#Código da interface
 def interface():
     print('-='*60)
     sleep(0.2)
     print('\033[32m{:^120}\033[m'.format('Bem Vindo ao Gusta TechPy'))
     sleep(0.2)
 
+    #Criando um ciclo infinito para caso o usuário faça algo que não deva
     while True:
         sleep(0.2)
         print('-='*60)
@@ -430,12 +446,20 @@ def interface():
         sleep(0.2)
         print('-='*60)
         sleep(0.2)
-        escolha = input('\nEscolha sua opção: ').strip() #A função vai verificar se a URL digitada existe
+        escolha = input('\nEscolha sua opção: ').strip() 
+
+        #Caso o usuário escolha certo, seguimos com o programa
         if escolha == '1':
             sleep(0.2)
-            url = input('\n\033[7mInforme a URL:\033[m ') #Vamos armazenar a URL do usuário
+
+            #Vamos armazenar a URL do usuário
+            url = input('\n\033[7mInforme a URL:\033[m ')
             while True:
+
+                #A função vai verificar se a URL digitada existe
                 if verifica_url(url):
+                    
+                    #Caso exista a URL vamos chamar as funções criadas anteriormente e executa-las
                     dicionario_ativos = ativos(url)
                     graf1(dicionario_ativos)
                     graf2(dicionario_ativos)
@@ -443,16 +467,23 @@ def interface():
                     qr_generator(dicionario_ativos)
                     excel_tabela(dicionario_ativos)
                     break
+
+                #Tratamento para caso a URL não exista
                 else:
                     sleep(0.2)
                     url = input('\n\033[7mInforme a URL:\033[m ') #Vamos armazenar a URL do usuário
                     verifica_url(url)
             break
-        elif escolha == '2': #Opção de fechar o programa
-            break
 
+        #Tratamento caso o usuário deseje sair do programa
+        elif escolha == '2':
+            break
+        
+        #Tratamento caso o usuário não escolha nenhuma das opções disoníveis
         else:
             sleep(0.2)
             print("\n\033[31mPor favor, escolha uma opção válida!\033[m")
+    
+    #Encerrando o código
     sleep(0.2)
     print("\n\033[32mObrigado, Volte Sempre!!\033[m\n")
