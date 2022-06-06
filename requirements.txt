@@ -1,0 +1,13 @@
+calendar
+requests
+bs4
+yfinance
+pandas
+matplotlib.pyplot
+qrcode
+openpyxl
+openpyxl.drawing.image
+openpyxl.styles.alignment
+openpyxl.styles
+validators
+time

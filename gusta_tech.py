@@ -1,5 +1,6 @@
 #Importando as bibliotecas necessárias para criarmos a função
 from calendar import c
+import bs4
 import requests
 from bs4 import BeautifulSoup
 import yfinance as yf
