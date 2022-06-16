@@ -118,8 +118,6 @@ def ativos(url):
 
         except:
             continue
-    
-    print(dicionario_ativos)
 
     #Ajustando a currency correta dos ativos
     for dicionario in dicionario_ativos:
