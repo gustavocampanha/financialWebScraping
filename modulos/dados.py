@@ -1,4 +1,4 @@
-#Importando as bibliotecas necessárias para criarmos a função
+#Importando as bibliotecas necessárias para criarmos as funções
 import bs4
 import requests
 from bs4 import BeautifulSoup
@@ -38,39 +38,39 @@ def ativos(url):
 
     #Adicionando as moedas no dicionario "dicionario_ativos"
     for a in range(0,tam_moeda,2):
-        try:
-            #Solicitando informações do ativo no Yahoo
-            moeda_info = yf.Ticker(conteudo_moeda[a].text).info
+        #Solicitando informações do ativo no Yahoo
+        moeda_info = yf.Ticker(conteudo_moeda[a].text).info
 
-            #Criando um dicionário do ativo
-            dicionario_ativos[conteudo_moeda[a].text] = dict()
-
-            #Adicionando o nome da moedas do ativo no dicionário do ativo
-            dicionario_ativos[conteudo_moeda[a].text]['Nome do Ativo'] = conteudo_moeda[a].text
-
-            #Adicionando a quantidade de moedas do ativo no dicionário do ativo
-            dicionario_ativos[conteudo_moeda[a].text]['Quantidade do Ativo'] = float(conteudo_moeda[a+1].text)
-
-            #Adicionando o valor da moeda no dicionário do ativo
-            dicionario_ativos[conteudo_moeda[a].text]['Valor do Ativo'] = moeda_info['regularMarketPrice']
-
-            #Descobrindo o valor investido nesse ativo
-            quant = float(conteudo_moeda[a+1].text)
-            valor = float(moeda_info['regularMarketPrice'])
-            tot = quant * valor
-            tot = round(tot, 2)
-
-            #Adicionando o valor investido na moeda no dicionário do ativo
-            dicionario_ativos[conteudo_moeda[a].text]['Valor Investido'] = tot
-
-            #Adicionando o tipo de ativo
-            dicionario_ativos[conteudo_moeda[a].text]['Tipo'] = 'Moeda'
-
-            #Adicionando a currency da moeda
-            dicionario_ativos[conteudo_moeda[a].text]['Currency'] = conteudo_moeda[a].text[0:3]
-        
-        except:
+        #Tratamento caso a moeda não exista
+        if moeda_info['regularMarketPrice'] == None:
             continue
+
+        #Criando um dicionário do ativo
+        dicionario_ativos[conteudo_moeda[a].text] = dict()
+
+        #Adicionando o nome da moedas do ativo no dicionário do ativo
+        dicionario_ativos[conteudo_moeda[a].text]['Nome do Ativo'] = conteudo_moeda[a].text
+
+        #Adicionando a quantidade de moedas do ativo no dicionário do ativo
+        dicionario_ativos[conteudo_moeda[a].text]['Quantidade do Ativo'] = float(conteudo_moeda[a+1].text)
+
+        #Adicionando o valor da moeda no dicionário do ativo
+        dicionario_ativos[conteudo_moeda[a].text]['Valor do Ativo'] = moeda_info['regularMarketPrice']
+
+        #Descobrindo o valor investido nesse ativo
+        quant = float(conteudo_moeda[a+1].text)
+        valor = float(moeda_info['regularMarketPrice'])
+        tot = quant * valor
+        tot = round(tot, 2)
+
+        #Adicionando o valor investido na moeda no dicionário do ativo
+        dicionario_ativos[conteudo_moeda[a].text]['Valor Investido'] = tot
+
+        #Adicionando o tipo de ativo
+        dicionario_ativos[conteudo_moeda[a].text]['Tipo'] = 'Moeda'
+
+        #Adicionando a currency da moeda
+        dicionario_ativos[conteudo_moeda[a].text]['Currency'] = conteudo_moeda[a].text[0:3]
 
 
     #Buscando a classe "acao" no código HTML
@@ -82,42 +82,44 @@ def ativos(url):
 
     #Adicionando as ações no dicionario "dicionario_ativos"
     for a in range(0,tam_acao,2):
-        try:
-            #Solicitando informações do ativo no Yahoo
-            acao_info = yf.Ticker(conteudo_acao[a].text).info
+        
+        #Solicitando informações do ativo no Yahoo
+        acao_info = yf.Ticker(conteudo_acao[a].text).info
 
-            #Criando um dicionário do ativo
-            dicionario_ativos[conteudo_acao[a].text] = dict()    
-
-            #Adicionando o nome da moedas do ativo no dicionário do ativo
-            dicionario_ativos[conteudo_acao[a].text]['Nome do Ativo'] = conteudo_acao[a].text
-            
-            #Adicionando a quantidade de ações do ativo no dicionário do ativo
-            dicionario_ativos[conteudo_acao[a].text]['Quantidade do Ativo'] = float(conteudo_acao[a+1].text)
-
-            #Adicionando o valor da ação no dicionário do ativo
-            dicionario_ativos[conteudo_acao[a].text]['Valor do Ativo'] = acao_info['regularMarketPrice']
-
-            #Descobrindo o valor investido nesse ativo
-            quant = float(conteudo_acao[a+1].text)
-            valor = float(acao_info['regularMarketPrice'])
-            tot = quant * valor
-            tot = round(tot, 2)
-
-            #Adicionando o valor investido na moeda no dicionário do ativo
-            dicionario_ativos[conteudo_acao[a].text]['Valor Investido'] = tot
-
-            #Adicionando o tipo de ativo
-            dicionario_ativos[conteudo_acao[a].text]['Tipo'] = 'Ação'
-
-            #Pegando a currency da ação
-            unidade_moeda_acao = acao_info['currency']
-
-            #Adicionando a currency da ação no dicionário
-            dicionario_ativos[conteudo_acao[a].text]['Currency'] = unidade_moeda_acao
-
-        except:
+        #Tratamento caso a ação não exista
+        if acao_info['regularMarketPrice'] == None:
             continue
+
+        #Criando um dicionário do ativo
+        dicionario_ativos[conteudo_acao[a].text] = dict()    
+
+        #Adicionando o nome da moedas do ativo no dicionário do ativo
+        dicionario_ativos[conteudo_acao[a].text]['Nome do Ativo'] = conteudo_acao[a].text
+        
+        #Adicionando a quantidade de ações do ativo no dicionário do ativo
+        dicionario_ativos[conteudo_acao[a].text]['Quantidade do Ativo'] = float(conteudo_acao[a+1].text)
+
+        #Adicionando o valor da ação no dicionário do ativo
+        dicionario_ativos[conteudo_acao[a].text]['Valor do Ativo'] = acao_info['regularMarketPrice']
+
+        #Descobrindo o valor investido nesse ativo
+        quant = float(conteudo_acao[a+1].text)
+        valor = float(acao_info['regularMarketPrice'])
+        tot = quant * valor
+        tot = round(tot, 2)
+
+        #Adicionando o valor investido na moeda no dicionário do ativo
+        dicionario_ativos[conteudo_acao[a].text]['Valor Investido'] = tot
+
+        #Adicionando o tipo de ativo
+        dicionario_ativos[conteudo_acao[a].text]['Tipo'] = 'Ação'
+
+        #Pegando a currency da ação
+        unidade_moeda_acao = acao_info['currency']
+
+        #Adicionando a currency da ação no dicionário
+        dicionario_ativos[conteudo_acao[a].text]['Currency'] = unidade_moeda_acao
+
 
     #Ajustando a currency correta dos ativos
     for dicionario in dicionario_ativos:
@@ -143,6 +145,7 @@ def ativos(url):
 
     #Ajustando o valor do ativo para o cambio do real
     for ticker_ativo, dict_ativo in dicionario_ativos.items():
+
 
         unidade_moeda = dict_ativo.get("Currency")
         

@@ -1,4 +1,4 @@
-#Importando as bibliotecas necessárias para criarmos a função
+#Importando as bibliotecas necessárias para criarmos as funções
 import pandas as pd
 import matplotlib.pyplot as plt
 import qrcode
