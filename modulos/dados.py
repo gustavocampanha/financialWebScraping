@@ -30,6 +30,7 @@ def ativos(url):
 
     #Buscando a tag "td" na classe "moeda"
     conteudo_moeda = content.find_all('td')
+    print(conteudo_moeda)
     tam_moeda = len(conteudo_moeda)
 
     #Criando um dicionario e uma lista para armazenarmos os dados dos ativos
